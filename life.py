@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 
 class GameState:
     def __init__(self, size=45):
@@ -31,6 +32,19 @@ class GameState:
                 elif alive == 3:
                     newboard[x, y] = 1
         self.board = newboard
+
+    def load_image(self, path):
+        img = Image.open(path)
+        # make the image black-and-white
+        img = img.convert("1")
+        data = np.asarray(img, dtype="int32")
+        data = np.rot90(data)
+        data = 1-data
+        # center the image on the map
+        width, height = data.shape
+        x_offset = int((self.size - width) / 2)
+        y_offset = int((self.size - height) / 2)
+        self.board[x_offset:x_offset+width, y_offset:y_offset+height] = data
 
     def print_display(self):
         # print the game state into stdout

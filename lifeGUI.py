@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.filedialog as fdlg
 import life
 
 class LifeGUI (tk.Frame):
@@ -9,7 +10,7 @@ class LifeGUI (tk.Frame):
         self.scale = scale
         self.delta = 250
         # add some interface buttons
-        self.load_button = tk.Button(self, text="load image")
+        self.load_button = tk.Button(self, text="load image", command=self.load)
         self.clear_button = tk.Button(self, text="clear board", command=self.clear)
         self.toggle_sim_button = tk.Button(self, text="toggle simulation",
                                            command=lambda: self.toggle_sim(None))
@@ -37,6 +38,10 @@ class LifeGUI (tk.Frame):
 
     def clear(self):
         self.gs = life.GameState(size=self.size)
+
+    def load(self):
+        path = fdlg.askopenfilename()
+        self.gs.load_image(path)
 
     def register_click(self, e):
         x = int(e.x / self.scale)
