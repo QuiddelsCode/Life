@@ -8,10 +8,18 @@ class LifeGUI (tk.Frame):
         self.size= size
         self.scale = scale
         self.delta = 250
+        # add some interface buttons
+        self.load_button = tk.Button(self, text="load image")
+        self.clear_button = tk.Button(self, text="clear board", command=self.clear)
+        self.toggle_sim_button = tk.Button(self, text="toggle simulation",
+                                           command=lambda: self.toggle_sim(None))
         # set up a nice black canvas
         dim = size * scale
         self.disp = tk.Canvas(self, width=dim, height=dim, bg="black")
-        self.disp.pack()
+        self.disp.grid(row=0, column=0, columnspan=3)
+        self.load_button.grid(row=1, column=0)
+        self.clear_button.grid(row=1, column=1)
+        self.toggle_sim_button.grid(row=1, column=2)
         # create and render the initial game state
         self.coords = []
         self.sim = False
@@ -26,6 +34,9 @@ class LifeGUI (tk.Frame):
 
     def toggle_sim(self, e):
         self.sim = not self.sim
+
+    def clear(self):
+        self.gs = life.GameState(size=self.size)
 
     def register_click(self, e):
         x = int(e.x / self.scale)
@@ -65,7 +76,7 @@ class LifeGUI (tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    game = LifeGUI(root)
+    game = LifeGUI(root, size=150, scale=6)
     game.pack()
     game.focus_set()
     root.mainloop()
