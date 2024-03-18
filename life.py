@@ -4,6 +4,7 @@ from PIL import Image
 class GameState:
     def __init__(self, size=45):
         self.board = np.zeros((size, size))
+        self.saved = np.zeros((size, size))
         self.size = size
 
     def handle_input(self, flipped):
@@ -45,6 +46,15 @@ class GameState:
         x_offset = int((self.size - width) / 2)
         y_offset = int((self.size - height) / 2)
         self.board[x_offset:x_offset+width, y_offset:y_offset+height] = data
+
+    def save_board(self):
+        self.saved = self.board.copy()
+
+    def restore_board(self):
+        self.board = self.saved.copy()
+
+    def clear_board(self):
+        self.board = np.zeros((self.size, self.size))
 
     def print_display(self):
         # print the game state into stdout

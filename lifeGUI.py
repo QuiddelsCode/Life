@@ -10,17 +10,21 @@ class LifeGUI (tk.Frame):
         self.scale = scale
         self.delta = 250
         # add some interface buttons
-        self.load_button = tk.Button(self, text="load image", command=self.load)
+        self.import_button = tk.Button(self, text="import image", command=self.import_img)
         self.clear_button = tk.Button(self, text="clear board", command=self.clear)
         self.toggle_sim_button = tk.Button(self, text="toggle simulation",
                                            command=lambda: self.toggle_sim(None))
+        self.save_button = tk.Button(self, text="save board", command=self.save)
+        self.restore_button = tk.Button(self, text="restore board", command=self.restore)
         # set up a nice black canvas
         dim = size * scale
         self.disp = tk.Canvas(self, width=dim, height=dim, bg="black")
         self.disp.grid(row=0, column=0, columnspan=3)
-        self.load_button.grid(row=1, column=0)
-        self.clear_button.grid(row=1, column=1)
-        self.toggle_sim_button.grid(row=1, column=2)
+        self.save_button.grid(row=1, column=0)
+        self.restore_button.grid(row=1, column=1)
+        self.clear_button.grid(row=1, column=2)
+        self.import_button.grid(row=2, column=0)
+        self.toggle_sim_button.grid(row=2, column=1)
         # create and render the initial game state
         self.coords = []
         self.sim = False
@@ -37,11 +41,19 @@ class LifeGUI (tk.Frame):
         self.sim = not self.sim
 
     def clear(self):
-        self.gs = life.GameState(size=self.size)
+        self.gs.clear_board()
 
-    def load(self):
+    def import_img(self):
         path = fdlg.askopenfilename()
         self.gs.load_image(path)
+
+    def save(self):
+        self.gs.save_board()
+        print("board saved")
+
+    def restore(self):
+        self.gs.restore_board()
+        print("board restored")
 
     def register_click(self, e):
         x = int(e.x / self.scale)
